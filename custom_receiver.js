@@ -17,7 +17,8 @@
   TAG = 'custom_receiver';
 
   CustomReceiver = (function() {
-    function CustomReceiver(type, callback) {
+    function CustomReceiver(type, callback, urlConfigs) {
+      this.urlConfigs = urlConfigs;
       var ref;
       this.type = type;
       if (callback == null) {
@@ -123,21 +124,23 @@
     };
 
     CustomReceiver.prototype.startUnix = function() {
-      this.videoControlReceiver.listen(config.videoControlReceiverPath, function() {
-        fs.chmodSync(config.videoControlReceiverPath, '777');
-        return logger.debug("[" + TAG + "] videoControl socket: " + config.videoControlReceiverPath);
+      var _this = this;
+      this.videoControlReceiver.listen(this.urlConfigs.videoControlReceiverPath, function() {
+        console.log(_this.urlConfigs.videoControlReceiverPath);
+        fs.chmodSync(_this.urlConfigs.videoControlReceiverPath, '777');
+        return logger.debug("[" + TAG + "] videoControl socket: " + _this.urlConfigs.videoControlReceiverPath);
       });
-      this.audioControlReceiver.listen(config.audioControlReceiverPath, function() {
-        fs.chmodSync(config.audioControlReceiverPath, '777');
-        return logger.debug("[" + TAG + "] audioControl socket: " + config.audioControlReceiverPath);
+      this.audioControlReceiver.listen(this.urlConfigs.audioControlReceiverPath, function() {
+        fs.chmodSync(_this.urlConfigs.audioControlReceiverPath, '777');
+        return logger.debug("[" + TAG + "] audioControl socket: " + _this.urlConfigs.audioControlReceiverPath);
       });
-      this.videoDataReceiver.listen(config.videoDataReceiverPath, function() {
-        fs.chmodSync(config.videoDataReceiverPath, '777');
-        return logger.debug("[" + TAG + "] videoData socket: " + config.videoDataReceiverPath);
+      this.videoDataReceiver.listen(this.urlConfigs.videoDataReceiverPath, function() {
+        fs.chmodSync(_this.urlConfigs.videoDataReceiverPath, '777');
+        return logger.debug("[" + TAG + "] videoData socket: " + _this.urlConfigs.videoDataReceiverPath);
       });
-      return this.audioDataReceiver.listen(config.audioDataReceiverPath, function() {
-        fs.chmodSync(config.audioDataReceiverPath, '777');
-        return logger.debug("[" + TAG + "] audioData socket: " + config.audioDataReceiverPath);
+      return this.audioDataReceiver.listen(this.urlConfigs.audioDataReceiverPath, function() {
+        fs.chmodSync(_this.urlConfigs.audioDataReceiverPath, '777');
+        return logger.debug("[" + TAG + "] audioData socket: " + _this.urlConfigs.audioDataReceiverPath);
       });
     };
 
@@ -174,33 +177,33 @@
     CustomReceiver.prototype.deleteReceiverSocketsSync = function() {
       var e;
       if (this.type === 'unix') {
-        if (fs.existsSync(config.videoControlReceiverPath)) {
+        if (fs.existsSync(this.urlConfigs.videoControlReceiverPath)) {
           try {
-            fs.unlinkSync(config.videoControlReceiverPath);
+            fs.unlinkSync(this.urlConfigs.videoControlReceiverPath);
           } catch (error) {
             e = error;
             logger.error("unlink error: " + e);
           }
         }
-        if (fs.existsSync(config.audioControlReceiverPath)) {
+        if (fs.existsSync(this.urlConfigs.audioControlReceiverPath)) {
           try {
-            fs.unlinkSync(config.audioControlReceiverPath);
+            fs.unlinkSync(this.urlConfigs.audioControlReceiverPath);
           } catch (error) {
             e = error;
             logger.error("unlink error: " + e);
           }
         }
-        if (fs.existsSync(config.videoDataReceiverPath)) {
+        if (fs.existsSync(this.urlConfigs.videoDataReceiverPath)) {
           try {
-            fs.unlinkSync(config.videoDataReceiverPath);
+            fs.unlinkSync(this.urlConfigs.videoDataReceiverPath);
           } catch (error) {
             e = error;
             logger.error("unlink error: " + e);
           }
         }
-        if (fs.existsSync(config.audioDataReceiverPath)) {
+        if (fs.existsSync(this.urlConfigs.audioDataReceiverPath)) {
           try {
-            fs.unlinkSync(config.audioDataReceiverPath);
+            fs.unlinkSync(this.urlConfigs.audioDataReceiverPath);
           } catch (error) {
             e = error;
             logger.error("unlink error: " + e);

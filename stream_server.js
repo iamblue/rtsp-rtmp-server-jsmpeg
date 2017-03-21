@@ -110,6 +110,11 @@
               return _this.onReceiveAudioDataBuffer.apply(_this, arguments);
             };
           })(this)
+        }, {
+          videoControlReceiverPath: this.configs.videoControlReceiverPath,
+          audioControlReceiverPath: this.configs.audioControlReceiverPath,
+          videoDataReceiverPath: this.configs.videoDataReceiverPath,
+          audioDataReceiverPath: this.configs.audioDataReceiverPath,
         });
         this.customReceiver.deleteReceiverSocketsSync();
       }
